@@ -2,7 +2,7 @@
 #### Video Demo:  <URL: https://www.youtube.com/watch?v=zljBFX0pbrU>
 #### Description:
 ##### **1) Introduction**
-  This is a very basic secured personal recipe diary, a web-application created with flask, and sqlite3 for the database. In order to use the app, you'll first need to create an account with a login username and password (at least 8 characters long, must contain at least one number, one lowercase letter and one uppercase letter), as well as a profile name which will be shown to other users when they search for your recipes or leave you a message. 
+  This is a very simple secured personal recipe diary - a web-application created with flask, sqlite3 for the database, and html, css, javascript for the front-end. In order to use the app, you'll first need to create an account with a login username and password (at least 8 characters long, must contain at least one number, one lowercase letter and one uppercase letter), as well as a profile name which will be shown to other users when they search for your recipes or leave you a message. 
   
   At it's core, the app allows users to create recipes and save them onto their accounts, you can of course edit or delete your exisitng recipes. However, the app also comes with other basic functionalities, such as the ability to leave a message to other users, or search for other user's recipes as mentioned already. On the actual recipe page, you have the ability to create a playlist by uploading your own mp3 files or convert youtube videos into mp3 files via URLs, you also have the ability to enable shuffle or move your songs up/down the playlist. On the main page, you can check the current weather by entering the name of the location and its corresponding country abbreviation.
   
