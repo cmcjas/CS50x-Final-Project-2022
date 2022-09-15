@@ -1,0 +1,158 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="cre">
+    <h1>Edit '{{ data1[0]['title'] }}' INFO</h1>
+    <form action = "/update" method = "POST" 
+    enctype = "multipart/form-data">
+        <div id="pri">
+            <div>
+                <label>Type of Food:</label>
+                <select name="type" required>
+                    <option disabled selected></option>
+                    <option>Meat</option>
+                    <option>Fish</option>
+                    <option>Salad</option>
+                    <option>Appetiser</option>
+                    <option>Main</option>
+                    <option>Side</option>
+                    <option>Soup</option>
+                    <option>Dessert</option>
+                    <option>Cake</option>
+                    <option>Bakery</option>
+                </select>
+            </div>
+            <label>Share privacy:</label>
+            <input class="box" type="checkbox" name="share" onclick="check(this)" value="Enabled" checked>Allowed</input>
+            <input class="box" type="checkbox" name="share" onclick="check(this)" value="Disabled">Not Allowed</input>
+        </div>  
+        <div>
+            <h4>Recipe Intro:</h4>
+            <textarea name="intro" cols="50" rows="10" required placeholder="Intro/shorts">{{ data1[0]['intro'] }}</textarea>
+        </div>
+        <div>
+            <h4>Recipe tips:</h4>
+            <textarea name="tip" cols="50" rows="10" required placeholder="Tips">{{ data1[0]['tip'] }}</textarea>
+        </div>
+
+        <div class="midprofile">
+            <div>
+                <h5>Ingredients</h5>
+                <div id="ingForm">
+                    {% for a in data2 %}
+                    <div id='ingField'><textarea name='ing[]'' cols='30' rows='5' required>{{ a['ing'] }}</textarea><a onclick='remove(this);' href='#''>DEL</a></div>
+                    {% endfor %}
+                </div>
+                <a onclick="add_fields();" href="#">ADD</a>
+            </div>
+            <div>
+                <h5>Equipments</h5>
+                <div id="equiForm">
+                    {% for b in data3 %}
+                    <div id='equiField'><textarea name='equi[]'' cols='30' rows='5' required>{{ b['equi'] }}</textarea><a onclick='remove2(this);' href='#''>DEL</a></div>
+                    {% endfor %}
+                </div>
+                <a onclick="add_fields2();" href="#">ADD</a>
+            </div>
+            <div class="midbottom"></div>
+        </div>
+
+        <div class=>
+            <h5>Nutrition</h5>
+            <div>
+                <input type="number" name="kcal" min="0" required placeholder="Kcal" value="{{ data5[0]['kcal'] }}">
+                <input type="number" name="fat" min="0" required placeholder="Fat in g" value="{{ data5[0]['fat'] }}">
+                <input type="number" name="sat" min="0"required placeholder="Saturates in g" value="{{ data5[0]['sat'] }}">
+                <input type="number" name="carb" min="0" required placeholder="Carbs in g" value="{{ data5[0]['carb'] }}">
+            </div>
+            <div>
+                <input type="number" name="sugar" min="0" required placeholder="Sugars in g" value="{{ data5[0]['sugar'] }}">
+                <input type="number" name="fibre" min="0" required placeholder="Fibre in g" value="{{ data5[0]['fibre'] }}">
+                <input type="number" name="pro" min="0" required placeholder="Protein in g" value="{{ data5[0]['pro'] }}">
+                <input type="number" name="salt" min="0" required placeholder="Salt in g" value="{{ data5[0]['salt'] }}">
+            </div>
+
+        </div>
+
+        <div>
+            <h5>Methods</h5>
+            <div id="methForm">
+                {% for c in data4 %}
+                <div id='methField'><textarea name='meth[]' cols='50' rows='10'>{{ c['meth'] }}</textarea>\
+                    <a onclick='removeMeth(this);' href='#''>DEL</a></div>
+                {% endfor %}
+            </div>
+            <a onclick="add_meth();" href="#">ADD</a>
+        </div>
+        <input type="hidden" name="title" value="{{ data1[0]['title'] }}">
+        <div class="bottom"></div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</div>
+
+
+<script>
+    function add_fields(){
+        let field = "<div id='ingField'><textarea name='ing[]'' cols='30' rows='5' required></textarea><a onclick='remove(this);' href='#''>DEL</a></div>";
+        $('#ingForm').append(field);
+        scroll(".midbottom");
+    }
+
+    function add_fields2(){
+        let field = "<div id='equiField'><textarea name='equi[]'' cols='30' rows='5' required></textarea><a onclick='remove2(this);' href='#''>DEL</a></div>";
+        $('#equiForm').append(field);
+        scroll(".midbottom");
+    }
+
+    function remove(pos){
+        $(pos).parent().remove();
+        scroll(".midbottom");
+    }
+
+    function remove2(pos){
+        $(pos).parent().remove();
+        scroll(".midbottom");
+    }
+
+    function add_meth(){
+        let field = "<div id='methField'><textarea name='meth[]' cols='50' rows='10'></textarea>\
+        <a onclick='removeMeth(this);' href='#''>DEL</a></div>";
+        $('#methForm').append(field);
+        scroll(".bottom");
+    }
+
+    function removeMeth(pos){
+        $(pos).parent().remove();
+        scroll(".bottom");
+    }
+
+    function check(input) {
+        var box = $(".box");
+
+        for(var i = 0; i < box.length; i++)
+        {
+            if(box[i].checked == true)
+            {
+                box[i].checked = false;
+            }
+        }
+        
+        if(input.checked == true)
+        {
+            input.checked = false;
+        }
+        else
+        {
+            input.checked = true;
+        }
+    }
+
+    window.onload = (event) => {
+        $('.pnamebar').append("<h7>HELLO, {{ pname[0]['pname'] }}</h7>");
+    }
+</script> 
+<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+<script src="/static/index.js"></script>
+
+{% endblock %}

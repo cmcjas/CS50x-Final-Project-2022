@@ -1,0 +1,278 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<style>
+    .current {
+      color:#ebbf46;
+      text-shadow: 2px 2px 15px black;
+    }
+</style>
+
+<audio src="/static/fairy.mp3" autoplay loop></audio>
+
+<!-- top icons for navigating to different sections on the homepage-->
+<div class="subfun">
+    <i class="bi-book-half" onclick="plan()"></i>
+    <i class="bi-cloud-fog2-fill" onclick="backhome()"></i>
+    <i class="bi-egg-fried" onclick="food()"></i>
+    <i class="bi-person-lines-fill" onclick="people()"></i>
+</div>
+
+<!-- user's own recipe section including search functionality  -->
+<div class="bar">
+    <input placeholder="filter by recipe name" type="text" current-search style="width: 300px;">
+    <div>
+        <label>Type of Food:</label>
+        <select id="ele2" name="type" onclick="empty($(p2), $(img2), $(r), $(ed))">
+            <option>None</option>
+            <option>Meat</option>
+            <option>Fish</option>
+            <option>Salad</option>
+            <option>Appetiser</option>
+            <option>Main</option>
+            <option>Side</option>
+            <option>Soup</option>
+            <option>Dessert</option>
+            <option>Cake</option>
+            <option>Bakery</option>
+        </select>
+    </div>
+</div>
+<div class="pcontain">
+    <div class="backimage"></div>
+    {% for p in profile %}
+    <div class="profile">                  
+        <img class="img2" src="/static/upload_data/image_{{ num }}/{{ p['img'] }}.jpg" style="width: 300px; height: 250px">
+        <form action="/player" method="post">
+            <input type="hidden" name="uid" value="{{ num }}">
+            <input type="hidden" class="typebtn2" value="{{ p['type'] }}">
+            <button class="btn btn-success listbtn2" data-pkey="{{ p['title'] }}_{{ p['author'] }}" name="name" type="submit" value="{{ p['title'] }}"><h5>{{ p['title'] }}</h5>
+                <h6 class="subi">({{ p['type'] }})<div class="info subi">Likes: <div class="lik2">{{ p['likes'] }}</div></div></h6><p>Privacy: {{ p['privacy'] }}</p></button>
+        </form>
+        <div class="editbtn">
+            <form action="/edit" method="post">
+                <input type="hidden" name="title" value="{{ p['title'] }}">
+                <button class="btn btn-secondary ebtn" type="submit"><i class="bi-pencil-square"></i></button>
+            </form>
+            <button class="btn btn-secondary rmbtn" name="{{ p['title'] }}" value="static/upload_data/image_{{ num }}/{{ p['img'] }}.jpg"\ 
+            onclick="rm2(this.name, this.value, this);"><i class="bi-eraser-fill"></i></button>
+        </div> 
+    </div>
+    {% endfor %}
+</div>
+
+<!-- weather section loaded by default via javascript  -->
+<div class="weather">
+    <div class="weapic"></div>
+    <div class="mtitle">
+        <video src="/static/smoke.mp4" autoplay muted></video>
+        <h1>
+            <span>W</span>
+            <span>E</span>
+            <span>L</span>
+            <span>C</span>
+            <span>O</span>
+            <span>M</span>
+            <span>E</span>
+        </h1>
+    </div>
+    <h2>{{ location }}</h2>
+    <h4>{{ country }}</h4>
+    <h3><div class="time">{{ time }}</div></h3>
+    <h1>Degrees: {{ temp1 }}&#8451</h1>
+    <h2>{{ weather }}</h2>
+    <h3>Feels like {{ temp2 }}&#8451</h3>
+    <div>
+        <form id="weather" action="/weather" method="POST">
+            <div class="weafield">
+                <h5>Location:</h5><input name="loc" type="text" placeholder="ie. London">
+                <h5>Country:</h5><input name="count" type="text" placeholder="ie. GB">
+                <input type="submit" value="Update">
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- second html section for weather for rendering it without the intro animation via css after icon is clicked -->
+<div class="weathertemp">
+    <div class="weapic"></div>
+    <div class="mtitle">
+        <video src="/static/smoke.mp4" autoplay muted></video>
+        <h1>
+            <span>W</span>
+            <span>E</span>
+            <span>L</span>
+            <span>C</span>
+            <span>O</span>
+            <span>M</span>
+            <span>E</span>
+        </h1>
+    </div>
+    <h2>{{ location }}</h2>
+    <h4>{{ country }}</h4>
+    <h3><div class="time">{{ time }}</div></h3>
+    <h1>Degrees: {{ temp1 }}&#8451</h1>
+    <h2>{{ weather }}</h2>
+    <h3>Feels like {{ temp2 }}&#8451</h3>
+    <div>
+        <form id="weather" action="/weather" method="POST">
+            <div class="weafield">
+                <h5>Lattitude:</h5><input name="lat" type="text">
+                <h5>Longitude:</h5><input name="lon" type="text">
+                <input type="submit" value="Update">
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 7 days food planner section -->
+<div id="planpage">
+    <form action="/planner" method="post">
+        <div id="carouselExampleCaptions" class="carousel slide" data-interval="false">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="5"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="6"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item planner-item active">       
+                    <h1>DAY 1</h1>
+                    <div class="form-group">
+                        <div class="field1">
+                            <label for="exampleFormControlTextarea1"><h3>Breakfast</h3></label>
+                            <textarea name="bf[]" class="form-control" id="exampleFormControlTextarea1" rows="1">{{ bf[0]['breakfast'] }}</textarea>
+                            <label for="exampleFormControlTextarea1"><h3>Lunch</h3></label>
+                            <textarea name="lu[]" class="form-control" id="exampleFormControlTextarea1" rows="1">{{ lu[0]['lunch'] }}</textarea>
+                            <label for="exampleFormControlTextarea1"><h3>Dinner</h3></label>
+                            <textarea name="din[]" class="form-control" id="exampleFormControlTextarea1" rows="1">{{ din[0]['dinner'] }}</textarea>
+                        </div>
+                        <div class="field2">
+                            <label for="exampleFormControlTextarea1"><h3>Shopping List:</h3></label>
+                            <textarea name="shop[]" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ shop[0]['shopping'] }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                {% for i in range(6) %}
+                <div class="carousel-item planner-item">
+                    <h1>DAY {{ i + 2 }}</h1>
+                    <div class="form-group">
+                        <div class="field1">
+                            <label for="exampleFormControlTextarea1"><h3>Breakfast</h3></label>
+                            <textarea name="bf[]" class="form-control" id="exampleFormControlTextarea1" rows="1">{{ bf[i+1]['breakfast'] }}</textarea>
+                            <label for="exampleFormControlTextarea1"><h3>Lunch</h3></label>
+                            <textarea name="lu[]" class="form-control" id="exampleFormControlTextarea1" rows="1">{{ lu[i+1]['lunch'] }}</textarea>
+                            <label for="exampleFormControlTextarea1"><h3>Dinner</h3></label>
+                            <textarea name="din[]" class="form-control" id="exampleFormControlTextarea1" rows="1">{{ din[i+1]['dinner'] }}</textarea>
+                        </div>
+                        <div class="field2">
+                            <label for="exampleFormControlTextarea1"><h3>Shopping List:</h3></label>
+                            <textarea name="shop[]" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ shop[i+1]['shopping'] }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <input type="submit" value="Save">
+    </form>
+</div>
+
+<!-- all existing recipes serach section including search functionality -->
+<div id="search">
+    <img src="/static/img/love.jpg">
+    <div class="wrapper">
+        <h1>Sharing is Loving.</h1>
+        <input placeholder="search by recipe name" type="text" data-search style="width: 300px;">
+        <div>
+            <label>Type of Food:</label>
+            <select id="ele" name="type" onclick="empty($(p), $(img), $(c), $(c2))">
+                <option>None</option>
+                <option>Meat</option>
+                <option>Fish</option>
+                <option>Salad</option>
+                <option>Appetiser</option>
+                <option>Main</option>
+                <option>Side</option>
+                <option>Soup</option>
+                <option>Dessert</option>
+                <option>Cake</option>
+                <option>Bakery</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div id="searchlist">
+    {% for a in all %}
+        {% if a['privacy'] == "Enabled" %}
+        <div class="listitem">                  
+            <img class="img" src="/static/upload_data/image_{{ a['user_id'] }}/{{ a['img'] }}.jpg" style="width: 300px; height: 250px">
+            <form action="/player" method="post">
+                <input type="hidden" name="uid" value="{{ a['user_id'] }}">
+                <input type="hidden" class="typebtn" value="{{ a['type'] }}">
+                <button class="btn btn-success listbtn" name="name" type="submit" value="{{ a['title'] }}"><h5>{{ a['title'] }}</h5>
+                    <h6 class="subi">({{ a['type'] }})<div class="info subi">Likes: <div class="lik">{{ a['likes'] }}</div></div></h6><p>Author: {{ a['author'] }}</p></button>
+            </form>
+            <button class="btn btn-secondary cbtn" onclick="msg(this)"><i class="bi-chat-dots-fill"></i></button>
+            <button class="btn btn-secondary cbtn2" data-author="{{ a['author'] }}" data-title="{{ a['title'] }}" value="{{ a['title'] }}" name="{{ a['likes']+1 }}" 
+            onclick="like(this, value, name)"><div class="icon"><i class="bi-hand-thumbs-up"></i></div></button>
+            <form action="/msg" method="post">
+                <input type="hidden" name="receiver" value="{{ a['author'] }}">
+                <div class="msgsubmit">
+                    <textarea name='msg' maxlength='300' cols='40' rows='5' required></textarea>\
+                    <div><input type='submit' value='Send'><input type='button' value='Cancel' onclick="can(this)"></div>
+                </div>
+            </form>
+        </div>
+        {% endif %}     
+    {% endfor %}
+</div>
+
+<script>
+    // render weahter background images based on the current weather condition and time
+    var wea = "{{ weather }}";
+    var hour = "{{ t1 }}";
+    var num = "{{ num }}";
+    // extract array sent from python codes as a string then turn it into json array
+    var ll = '{{ key|safe }}';
+    var key_list = JSON.parse(ll);
+
+    function change(c, s, d) {
+        if (wea === c && (hour >= 18 && hour <= 23 || hour >= 0 && hour <= 5)){
+            $('.weapic').append(s);
+        }
+        else if (wea === c && (hour >= 6 && hour <= 17)){
+            $('.weapic').append(d);
+        }
+    }
+
+    window.onload = (event) => {
+        like_clicked();
+        change('Clouds', "<img src='/static/img/cloudpm.jpg'></img>", "<img src='/static/img/cloudam.jpg'></img>");
+        change('Clear', "<img src='/static/img/clearpm.jpg'></img>", "<img src='/static/img/clearam.jpg'></img>");
+        change('Rain', "<img src='/static/img/rainpm.jpg'></img>", "<img src='/static/img/rainam.jpg'></img>");
+        change('Drizzle', "<img src='/static/img/lightpm.jpg'></img>", "<img src='/static/img/lightam.jpg'></img>");
+        change('Thunderstorm', "<img src='/static/img/thunderpm.jpg'></img>", "<img src='/static/img/thunderam.jpg'></img>");
+        change('Snow', "<img src='/static/img/snowpm.jpg'></img>", "<img src='/static/img/snowam.jpg'></img>");
+        change('Mist', "<img src='/static/img/fogpm.jpg'></img>", "<img src='/static/img/fogam.jpg'></img>");
+        change('Smoke', "<img src='/static/img/fogpm.jpg'></img>", "<img src='/static/img/fogam.jpg'></img>");
+        change('Haze', "<img src='/static/img/fogpm.jpg'></img>", "<img src='/static/img/fogam.jpg'></img>");
+        change('Fog', "<img src='/static/img/fogpm.jpg'></img>", "<img src='/static/img/fogam.jpg'></img>");
+        change('Dust', "<img src='/static/img/sandpm.jpg'></img>", "<img src='/static/img/sandam.jpg'></img>");
+        change('Sand', "<img src='/static/img/sandpm.jpg'></img>", "<img src='/static/img/sandam.jpg'></img>");
+        change('Ash', "<img src='/static/img/sandpm.jpg'></img>", "<img src='/static/img/sandam.jpg'></img>");
+        change('Squall', "<img src='/static/img/windpm.jpg'></img>", "<img src='/static/img/windam.jpg'></img>");
+        change('Tornado', "<img src='/static/img/windpm.jpg'></img>", "<img src='/static/img/windam.jpg'></img>");
+        $('.pnamebar').append("<h7>HELLO, {{ pname[0]['pname'] }}</h7>");
+    }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/static/index.js"></script>
+<script src="/static/search.js"></script>
+<script src="/static/ajax.js"></script>
+
+{% endblock %}

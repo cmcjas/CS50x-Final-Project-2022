@@ -1,0 +1,155 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <div class="cre">
+        <h1>Create Your Own Recipt</h1>
+        <form action = "/create" method = "POST" 
+        enctype = "multipart/form-data">
+            <label>Profile creation:</label>
+            <input type="text" name="name" required maxlength="60" placeholder="Recipe name">
+            <input class="form-control-file" id="exampleFormControlFile1" type="file" name="img_file" accept=".jpg" required>
+            <div>
+                <div>
+                    <label>Type of Food:</label>
+                    <select name="type" required>
+                        <option disabled selected></option>
+                        <option>Meat</option>
+                        <option>Fish</option>
+                        <option>Salad</option>
+                        <option>Appetiser</option>
+                        <option>Main</option>
+                        <option>Side</option>
+                        <option>Soup</option>
+                        <option>Dessert</option>
+                        <option>Cake</option>
+                        <option>Bakery</option>
+                    </select>
+                </div>
+                <div id="pri">
+                    <label>Share privacy:</label>
+                    <input class="box" type="checkbox" name="share" onclick="check(this)" value="Enabled" checked>Allowed</input>
+                    <input class="box" type="checkbox" name="share" onclick="check(this)" value="Disabled">Not Allowed</input>
+                </div>               
+            </div>
+
+            <div class="first">
+                <textarea name="intro" cols="50" rows="10" required placeholder="Intro/shorts"></textarea>
+            </div>
+            <div>
+                <textarea name="tip" cols="50" rows="10" required placeholder="Tips"></textarea>
+            </div>
+
+            <div class="midprofile">
+                <div>
+                    <h5>Ingredients</h5>
+                    <div id="ingForm"></div>
+                    <a onclick="add_fields();" href="#">ADD</a>
+                </div>
+                <div>
+                    <h5>Equipments</h5>
+                    <div id="equiForm"></div>
+                    <a onclick="add_fields2();" href="#">ADD</a>
+                </div>
+                <div class="midbottom"></div>
+            </div>
+
+
+            <div class>
+                <h5>Nutrition</h5>
+                <div>
+                    <input type="number" name="kcal" required placeholder="Kcal">
+                    <input type="number" name="fat" required placeholder="Fat in g">
+                    <input type="number" name="sat" required placeholder="Saturates in g">
+                    <input type="number" name="carb" required placeholder="Carbs in g">
+                </div>
+                <div>
+                    <input type="number" name="sugar" required placeholder="Sugars in g">
+                    <input type="number" name="fibre" required placeholder="Fibre in g">
+                    <input type="number" name="pro" required placeholder="Protein in g">
+                    <input type="number" name="salt" required placeholder="Salt in g">
+                </div>
+            </div>
+          
+            <div>
+                <h5>Methods</h5>
+                <div id="methForm"></div>
+                <a onclick="add_meth();" href="#">ADD</a>
+            </div>
+            <div class="bottom"></div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+
+    
+    <script>
+        // functions for adding or deleting input fields for ingredients, equipments and methods.
+        function add_fields(){
+            let field = "<div id='ingField'><textarea name='ing[]'' cols='30' rows='5' required></textarea><a onclick='remove(this);' href='#''>DEL</a></div>";
+            $('#ingForm').append(field);
+            scroll(".midbottom");
+        }
+
+        function add_fields2(){
+            let field = "<div id='equiField'><textarea name='equi[]'' cols='30' rows='5' required></textarea><a onclick='remove2(this);' href='#''>DEL</a></div>";
+            $('#equiForm').append(field);
+            scroll(".midbottom");
+        }
+
+        function remove(pos){
+            $(pos).parent().remove();
+            scroll(".midbottom");
+        }
+
+        function remove2(pos){
+            $(pos).parent().remove();
+            scroll(".midbottom");
+        }
+
+        function add_meth(){
+            let field = "<div id='methField'><textarea name='meth[]' cols='50' rows='10'></textarea>\
+            <a onclick='removeMeth(this);' href='#''>DEL</a></div>";
+            $('#methForm').append(field);
+            scroll(".bottom");
+        }
+
+        function removeMeth(pos){
+            $(pos).parent().remove();
+            scroll(".bottom");
+        }
+
+        // privacy sharing option - allowed or not allowed: ensure only one option can be checked at any given time
+        function check(input) {
+            var box = $(".box");
+
+            // uncheck all options
+            for(var i = 0; i < box.length; i++)
+            {
+                if(box[i].checked == true)
+                {
+                    box[i].checked = false;
+                }
+            }
+
+            // check allows if only if the clicked option is not already checked      
+            if(input.checked == true)
+            {
+                input.checked = false;
+            }
+            else
+            {
+                input.checked = true;
+            }
+        }
+
+        window.onload = (event) => {
+            // render hello message on the top left of the html page
+            $('.pnamebar').append("<h7>HELLO, {{ pname[0]['pname'] }}</h7>");
+        }
+    </script> 
+
+    <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+    <script src="/static/index.js"></script>
+{% endblock %}
+
+
